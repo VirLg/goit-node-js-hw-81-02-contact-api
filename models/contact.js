@@ -10,12 +10,12 @@ const contactSchema = new Schema(
 
     email: {
       type: String,
-      // match: /^minDomainSegments: 2, tlds: { allow: ['com', 'net'] } $/,
+      match: /^minDomainSegments: 2, tlds: { allow: ['com', 'net'] } $/,
       required: true,
     },
     phone: {
       type: String,
-      // match: /^\(\d{3}\) \d{3}-\d{4}$/,
+      match: /^\(\d{3}\) \d{3}-\d{4}$/,
       required: true,
     },
     favorite: {
