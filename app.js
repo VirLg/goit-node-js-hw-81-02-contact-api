@@ -1,13 +1,10 @@
-// const express = require('express')
-// const logger = require('morgan')
-// const cors = require('cors')
 import contactsRouter from './routes/api/contacts.js';
 import express from 'express';
 import logger from 'morgan';
 import cors from 'cors';
-
+import dotenv from 'dotenv';
 const app = express();
-
+dotenv.config();
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
 
 app.use(logger(formatsLogger));
