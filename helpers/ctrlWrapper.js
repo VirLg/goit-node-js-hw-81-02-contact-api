@@ -8,7 +8,7 @@ const ctrlWrapper = ctrl => {
       next(error);
     }
   };
-  console.log('ctrl', 'req');
+
   return func;
 };
 export default ctrlWrapper;
