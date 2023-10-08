@@ -10,7 +10,6 @@ const contactSchema = new Schema(
 
     email: {
       type: String,
-      match: /^minDomainSegments: 2, tlds: { allow: ['com', 'net'] } $/,
       required: true,
     },
     phone: {
@@ -37,7 +36,7 @@ export const contactAddShcema = Joi.object({
   phone: Joi.string()
     .pattern(/^\(\d{3}\) \d{3}-\d{4}$/)
     .required(),
-  favorite: Joi.string(),
+  favorite: Joi.boolean(),
 });
 export const updateFavoriteShema = Joi.object({
   favorite: Joi.boolean().required(),

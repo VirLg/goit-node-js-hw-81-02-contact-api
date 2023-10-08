@@ -41,11 +41,20 @@ export const add = async (req, res, next) => {
 
 export const put = async (req, res, next) => {
   const { contactId } = req.params;
+
+  // try {
   const result = await Contact.findByIdAndUpdate(contactId, req.body, {
     new: true,
     runValidators: true,
   });
+  // if (!result) {
+  //   throw HttpError(404, 'Not found');
+  // }
   res.json(result);
+  // } catch (error) {
+  //   console.log('result', error.status);
+  //   next(error);
+  // }
 };
 
 export default { add, getAll, getById, put, deleteById };

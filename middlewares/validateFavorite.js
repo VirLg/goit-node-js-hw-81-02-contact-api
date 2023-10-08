@@ -3,9 +3,7 @@ const validateFavotite = updateFavoriteShema => {
   const func = (req, res, next) => {
     const { error } = updateFavoriteShema.validate(req.body);
     if (error) {
-      return next(
-        HttpError(404, `missing required ${error.details[0].path} field`)
-      );
+      return next(HttpError(400, `missing field ${error.details[0].path} `));
     }
     next();
   };
