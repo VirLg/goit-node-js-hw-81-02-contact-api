@@ -3,7 +3,7 @@ import { Schema, model } from 'mongoose';
 import { handleSaveError } from './hooks.js';
 const contactSchema = new Schema(
   {
-    userName: {
+    name: {
       type: String,
       required: true,
     },

@@ -23,3 +23,11 @@ const userSchema = new Schema(
   },
   { versionKey: false, timestamps: true }
 );
+const User = model('user', userSchema);
+export default User;
+
+export const userJoiSignin = Joi.object({
+  name: Joi.string().required(),
+  email: Joi.string().emailemailRegexp.required(),
+  password: Joi.string().min(6).required(),
+});
