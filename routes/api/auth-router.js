@@ -6,5 +6,5 @@ import userSchema, { userJoiSignin, userJoiSignup } from '../../models/User.js';
 
 const authRouter = Router();
 const { signup } = controllerUser;
-authRouter.post('/signup', ctrlWrapper(signup));
+authRouter.post('/register', ctrlWrapper(signup));
 export default authRouter;
