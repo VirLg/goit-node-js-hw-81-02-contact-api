@@ -10,9 +10,9 @@ const autanthicate = async (req, res, next) => {
   } else {
     try {
       const { id } = jwt.verify(token, JWT_SECRET);
-      console.log('id', id);
+
       const user = await User.findById(id);
-      if (!user) {
+      if (!user || !user.token) {
         throw HttpError(401, 'Not authorized');
       }
       req.user = user;
