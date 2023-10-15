@@ -54,5 +54,6 @@ const getCurrent = (req, res, next) => {
 };
 const logout = async (req, res, next) => {
   await User.findByIdAndUpdate(req.user._id, { token: '' });
+  res.status(204);
 };
 export default { signup, signin, getCurrent, logout };
