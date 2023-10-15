@@ -1,10 +1,8 @@
 import express from 'express';
 import { Router } from 'express';
+import { ctrlWrapper, validateBody } from '../../helpers/index.js';
 import controllerUser from '../../controlers/auth-controller.js';
-import ctrlWrapper from '../../helpers/ctrlWrapper.js';
-// import userSchema, { userJoiSignin, userJoiSignup } from '../../models/User.js';
 import isBodyEmpty from '../../middlewares/isBodyEmpty.js';
-import validateBody from '../../helpers/validateBody.js';
 import { userJoiSignin, userJoiSignup } from '../../models/User.js';
 
 const joiValidateAuth = validateBody(userJoiSignup);
