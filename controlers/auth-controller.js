@@ -38,11 +38,21 @@ const signin = async (req, res, next) => {
       throw HttpError(401, 'Email or password is wrong');
     } else {
       const token = generateToken(user._id);
-      // const createToken = await User.findByIdAndUpdate(token, req.body);
+      await User.findByIdAndUpdate(user._id, { token });
 
       res.status(200).json({ token });
     }
   }
 };
 
-export default { signup, signin };
+const getCurrent = (req, res, next) => {
+  const { email, subscription } = req.body;
+  res.status(200).json({
+    email,
+    subscription,
+  });
+};
+const logout = async (req, res, next) => {
+  await User.findByIdAndUpdate(req.user._id, { token: '' });
+};
+export default { signup, signin, getCurrent, logout };

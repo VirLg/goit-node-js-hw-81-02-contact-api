@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import 'dotenv/config';
-import { HttpError } from './index.js';
+
 const generateToken = id => {
   try {
     const { JWT_SECRET } = process.env;
