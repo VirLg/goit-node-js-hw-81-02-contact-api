@@ -34,7 +34,9 @@ export const deleteById = async (req, res, next) => {
 };
 
 export const add = async (req, res, next) => {
-  const createContact = await Contact.create(req.body);
+  const { _id: owner } = req.user;
+  console.log('first', owner);
+  const createContact = await Contact.create({ ...req.body, owner });
   res.status(201).json(createContact);
 };
 
