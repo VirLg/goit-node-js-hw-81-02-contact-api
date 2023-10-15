@@ -6,6 +6,7 @@ import {
   isBodyEmpty,
   isValidId,
   validateFavotite,
+  autanthicate,
 } from '../../middlewares/index.js';
 const { add, getAll, getById, put, deleteById } = controllersContact;
 
@@ -14,6 +15,7 @@ const router = Router();
 const joiValidate = validateBody(contactAddShcema);
 const joiUpdate = validateFavotite(updateFavoriteShema);
 
+router.use(autanthicate);
 router.get('/', ctrlWrapper(getAll));
 router.get('/:contactId', isValidId, ctrlWrapper(getById));
 router.delete('/:contactId', isValidId, ctrlWrapper(deleteById));
