@@ -2,7 +2,8 @@ import Contact from '../models/Contact.js';
 import { HttpError } from '../helpers/index.js';
 
 const getAll = async (req, res) => {
-  const result = await Contact.find();
+  const { _id: owner } = req.user;
+  const result = await Contact.find({ owner });
   res.json(result);
 };
 
