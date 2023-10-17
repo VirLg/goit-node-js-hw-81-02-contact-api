@@ -7,9 +7,10 @@ import {
   isValidId,
   validateFavotite,
   autanthicate,
+  upload,
 } from '../../middlewares/index.js';
 const { add, getAll, getById, put, deleteById } = controllersContact;
-
+const upload = multer().single('avatar');
 const router = Router();
 
 const joiValidate = validateBody(contactAddShcema);
