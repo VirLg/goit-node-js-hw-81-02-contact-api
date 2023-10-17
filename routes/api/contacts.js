@@ -10,7 +10,7 @@ import {
   upload,
 } from '../../middlewares/index.js';
 const { add, getAll, getById, put, deleteById } = controllersContact;
-const upload = multer().single('avatar');
+
 const router = Router();
 
 const joiValidate = validateBody(contactAddShcema);
@@ -20,7 +20,13 @@ router.use(autanthicate);
 router.get('/', ctrlWrapper(getAll));
 router.get('/:contactId', isValidId, ctrlWrapper(getById));
 router.delete('/:contactId', isValidId, ctrlWrapper(deleteById));
-router.post('/', isBodyEmpty, joiValidate, ctrlWrapper(add));
+router.post(
+  '/',
+  upload.single('avatar'),
+  isBodyEmpty,
+  joiValidate,
+  ctrlWrapper(add)
+);
 router.put('/:contactId', joiValidate, isValidId, ctrlWrapper(put));
 router.patch('/:contactId/favorite', joiUpdate, isValidId, ctrlWrapper(put));
 export default router;
