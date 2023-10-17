@@ -28,30 +28,36 @@ const signin = async (req, res, next) => {
   const { email, password } = req.body;
 
   const user = await User.findOne({ email });
-
   if (!user) {
     throw HttpError(401, 'Email or password is wrong');
   } else {
     const passCompare = await bcrypt.compare(password, user.password);
-    console.log('passCompare', passCompare);
     if (!passCompare) {
       throw HttpError(401, 'Email or password is wrong');
     } else {
       const token = generateToken(user._id);
       await User.findByIdAndUpdate(user._id, { token });
 
-      res.status(200).json({ token });
+      res.status(200).json({
+        token,
+        user: {
+          email: user.email,
+          subscription: user.subscription,
+        },
+      });
     }
   }
 };
 
-const getCurrent = (req, res, next) => {
-  const { email, subscription } = req.body;
+const getCurrent = async (req, res, next) => {
+  const { email } = req.body;
+  const resp = await User.findOne({ email: email });
   res.status(200).json({
     email,
-    subscription,
+    subscription: resp.subscription,
   });
 };
+
 const logout = async (req, res, next) => {
   await User.findByIdAndUpdate(req.user._id, { token: '' });
   res.status(204);

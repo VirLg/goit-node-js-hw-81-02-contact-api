@@ -37,7 +37,6 @@ const User = model('user', userSchema);
 export default User;
 
 export const userJoiSignup = Joi.object({
-  username: Joi.string().required(),
   email: Joi.string().pattern(emailRegexp).required(),
   password: Joi.string().min(6).required(),
 });
