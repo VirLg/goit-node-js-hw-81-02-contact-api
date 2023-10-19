@@ -52,7 +52,6 @@ const signin = async (req, res, next) => {
 const getCurrent = async (req, res, next) => {
   const { email } = req.body;
   const user = await User.findOne({ email });
-  console.log('email', user);
 
   res.status(200).json({
     email: user.email,
