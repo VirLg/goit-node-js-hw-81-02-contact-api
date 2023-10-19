@@ -1,5 +1,7 @@
 import Contact from '../models/Contact.js';
 import { HttpError } from '../helpers/index.js';
+import fs from 'fs/promises';
+import path from 'path';
 
 const getAll = async (req, res) => {
   const { _id: owner } = req.user;
@@ -35,9 +37,18 @@ export const deleteById = async (req, res, next) => {
 };
 
 export const add = async (req, res, next) => {
+  const { file } = req;
+  const pathAvatarTemp = file.path;
+  const pathAvatarPublic = path.resolve('public', 'avatars', file.filename);
+
+  await fs.rename(pathAvatarTemp, pathAvatarPublic);
+  const avatarDB = path.join('public', 'avatars', file.filename);
   const { _id: owner } = req.user;
-  console.log('first', owner);
-  const createContact = await Contact.create({ ...req.body, owner });
+  const createContact = await Contact.create({
+    ...req.body,
+    owner,
+    avatar: avatarDB,
+  });
   res.status(201).json(createContact);
 };
 
