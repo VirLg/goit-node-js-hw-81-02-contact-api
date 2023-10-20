@@ -10,9 +10,10 @@ const joiValidateSignin = validateBody(userJoiSignin);
 
 const authRouter = Router();
 
-const { signup, signin, getCurrent, logout } = controllerUser;
+const { signup, signin, getCurrent, logout, updateAvatar } = controllerUser;
 authRouter.post('/register', isBodyEmpty, joiValidateAuth, ctrlWrapper(signup));
 authRouter.post('/login', isBodyEmpty, joiValidateSignin, ctrlWrapper(signin));
 authRouter.get('/current', autanthicate, ctrlWrapper(getCurrent));
 authRouter.post('/logout', autanthicate, ctrlWrapper(logout));
+authRouter.patch('/avatars', ctrlWrapper(updateAvatar));
 export default authRouter;

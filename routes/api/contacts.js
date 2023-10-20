@@ -29,4 +29,5 @@ router.post(
 );
 router.put('/:contactId', joiValidate, isValidId, ctrlWrapper(put));
 router.patch('/:contactId/favorite', joiUpdate, isValidId, ctrlWrapper(put));
+
 export default router;

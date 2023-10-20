@@ -23,11 +23,15 @@ const contactSchema = new Schema(
     },
     avatar: {
       type: String,
-      required: true,
+      // required: true,
     },
     owner: {
       type: Schema.Types.ObjectId,
       ref: 'user',
+      required: true,
+    },
+    urlAvatar: {
+      type: String,
       required: true,
     },
   },

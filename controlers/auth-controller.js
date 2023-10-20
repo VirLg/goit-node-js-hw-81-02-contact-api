@@ -63,4 +63,7 @@ const logout = async (req, res, next) => {
   await User.findByIdAndUpdate(req.user._id, { token: '' });
   res.status(204).json({});
 };
-export default { signup, signin, getCurrent, logout };
+const updateAvatar = async (req, res, next) => {
+  const oldAvatar = await User.findOne({ urlAvatar });
+};
+export default { signup, signin, getCurrent, logout, updateAvatar };
