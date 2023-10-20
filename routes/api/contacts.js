@@ -20,13 +20,7 @@ router.use(autanthicate);
 router.get('/', ctrlWrapper(getAll));
 router.get('/:contactId', isValidId, ctrlWrapper(getById));
 router.delete('/:contactId', isValidId, ctrlWrapper(deleteById));
-router.post(
-  '/',
-  upload.single('avatar'),
-  isBodyEmpty,
-  joiValidate,
-  ctrlWrapper(add)
-);
+router.post('/', isBodyEmpty, joiValidate, ctrlWrapper(add));
 router.put('/:contactId', joiValidate, isValidId, ctrlWrapper(put));
 router.patch('/:contactId/favorite', joiUpdate, isValidId, ctrlWrapper(put));
 

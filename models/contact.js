@@ -21,17 +21,9 @@ const contactSchema = new Schema(
       type: Boolean,
       default: false,
     },
-    avatar: {
-      type: String,
-      // required: true,
-    },
     owner: {
       type: Schema.Types.ObjectId,
       ref: 'user',
-      required: true,
-    },
-    urlAvatar: {
-      type: String,
       required: true,
     },
   },

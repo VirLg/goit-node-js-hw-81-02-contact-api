@@ -2,7 +2,7 @@ import Contact from '../models/Contact.js';
 import { HttpError } from '../helpers/index.js';
 import fs from 'fs/promises';
 import path from 'path';
-import gravatar from 'gravatar';
+
 import Jimp from 'jimp';
 const getAll = async (req, res) => {
   const { _id: owner } = req.user;
@@ -38,25 +38,11 @@ export const deleteById = async (req, res, next) => {
 };
 
 export const add = async (req, res, next) => {
-  const { filename, path: oldPath } = req.file;
   const { _id: owner, email } = req.user;
-
-  const pathAvatarTemp = oldPath;
-  const pathAvatarPublic = path.resolve('public', 'avatars', filename);
-
-  await fs.rename(pathAvatarTemp, pathAvatarPublic);
-  const avatarDB = path.join('public', 'avatars', filename);
-  const generatorAvatar = gravatar.url(email, {
-    s: '250',
-    r: 'pg',
-    d: 'retro',
-  });
 
   const createContact = await Contact.create({
     ...req.body,
     owner,
-    avatar: avatarDB,
-    urlAvatar: generatorAvatar,
   });
   res.status(201).json(createContact);
 };
