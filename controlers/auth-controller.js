@@ -1,9 +1,10 @@
 import gravatar from 'gravatar';
 import path from 'path';
 import fs from 'fs/promises';
-import User, { userJoiSignin } from '../models/User.js';
-import Contact from '../models/Contact.js';
+import Jimp from 'jimp';
 import bcrypt from 'bcrypt';
+import User, { userJoiSignin } from '../models/User.js';
+
 import {
   HttpError,
   validateHashPassword,
@@ -75,19 +76,19 @@ const logout = async (req, res, next) => {
   await User.findByIdAndUpdate(req.user._id, { token: '' });
   res.status(204).json({});
 };
+
 const updateAvatar = async (req, res, next) => {
-  const { filename, path: oldPath } = req.file;
-  const { avatarURL } = req.body;
+  const { filename } = req.file;
+  const image = await Jimp.read(`temp/${filename}`);
 
-  const pathAvatarTemp = oldPath;
-  const pathAvatarPublic = path.resolve('public', 'avatars', filename);
-  await fs.rename(pathAvatarTemp, pathAvatarPublic);
+  await image.resize(250, 250);
+  const a = await image.writeAsync(`public/avatars/${filename}`);
 
+  const pathAvatar = path.join('public', 'avatars', filename);
   const result = await User.findByIdAndUpdate(req.user._id, {
-    avatarURL: pathAvatarPublic,
+    avatarURL: pathAvatar,
   });
 
-  res.json(result);
-  console.log('first', pathAvatarPublic);
+  res.json({ avatarURL: result.avatarURL });
 };
 export default { signup, signin, getCurrent, logout, updateAvatar };
