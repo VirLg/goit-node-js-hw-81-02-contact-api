@@ -2,7 +2,8 @@ import Contact from '../models/Contact.js';
 import { HttpError } from '../helpers/index.js';
 
 const getAll = async (req, res) => {
-  const result = await Contact.find();
+  const { _id: owner } = req.user;
+  const result = await Contact.find({ owner });
   res.json(result);
 };
 
@@ -34,7 +35,9 @@ export const deleteById = async (req, res, next) => {
 };
 
 export const add = async (req, res, next) => {
-  const createContact = await Contact.create(req.body);
+  const { _id: owner } = req.user;
+  console.log('first', owner);
+  const createContact = await Contact.create({ ...req.body, owner });
   res.status(201).json(createContact);
 };
 
