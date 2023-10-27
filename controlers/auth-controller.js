@@ -9,6 +9,7 @@ import {
   HttpError,
   validateHashPassword,
   generateToken,
+  elasticemail,
 } from '../helpers/index.js';
 
 const signup = async (req, res, next) => {
@@ -90,4 +91,13 @@ const updateAvatar = async (req, res, next) => {
 
   res.json({ avatarURL: result.avatarURL });
 };
-export default { signup, signin, getCurrent, logout, updateAvatar };
+
+const verificationElasticEmail = () => elasticemail();
+export default {
+  signup,
+  signin,
+  getCurrent,
+  logout,
+  updateAvatar,
+  verificationElasticEmail,
+};

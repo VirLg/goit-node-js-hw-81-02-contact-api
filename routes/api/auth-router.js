@@ -10,7 +10,14 @@ const joiValidateSignin = validateBody(userJoiSignin);
 
 const authRouter = Router();
 
-const { signup, signin, getCurrent, logout, updateAvatar } = controllerUser;
+const {
+  signup,
+  signin,
+  getCurrent,
+  logout,
+  updateAvatar,
+  verificationElasticEmail,
+} = controllerUser;
 authRouter.post(
   '/register',
   upload.single('urlAvatar'),
@@ -27,4 +34,5 @@ authRouter.patch(
   autanthicate,
   ctrlWrapper(updateAvatar)
 );
+authRouter.get('/v', ctrlWrapper(verificationElasticEmail));
 export default authRouter;
