@@ -63,8 +63,8 @@ const signin = async (req, res, next) => {
 };
 
 const getCurrent = async (req, res, next) => {
-  const { token } = req.user.token;
-  const user = await User.findOne(token);
+  const { email } = req.body;
+  const resp = await User.findOne({ email: email });
   res.status(200).json({
     email: user.email,
     subscription: user.subscription,
