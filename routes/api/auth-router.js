@@ -34,5 +34,5 @@ authRouter.patch(
   autanthicate,
   ctrlWrapper(updateAvatar)
 );
-authRouter.get('/v', ctrlWrapper(verificationElasticEmail));
+authRouter.post('/v', ctrlWrapper(verificationElasticEmail));
 export default authRouter;

@@ -11,9 +11,11 @@ import {
   generateToken,
   elasticemail,
 } from '../helpers/index.js';
+import { nanoid } from 'nanoid';
 
 const signup = async (req, res, next) => {
   const { email, password } = req.body;
+  const verificationToken = nanoid();
   // const avatarDB = path.join('public', 'avatars', filename);
   const generatorAvatar = gravatar.url(email, {
     s: '250',
@@ -30,6 +32,11 @@ const signup = async (req, res, next) => {
       ...req.body,
       password: hashPassword,
       avatarURL: generatorAvatar,
+      verificationToken,
+    });
+    elasticemail({
+      to: 'rocav44797@soebing.com',
+      sendBody: `<a target="blank" href="localhost:3000/api/users/verify/${verificationToken}">Hello, this verification link</a>`,
     });
     res.status(201).json({
       email: createUser.email,
@@ -92,7 +99,9 @@ const updateAvatar = async (req, res, next) => {
   res.json({ avatarURL: result.avatarURL });
 };
 
-const verificationElasticEmail = () => elasticemail();
+const verificationElasticEmail = async () => {
+  const a = await User.findOne(verificationToken);
+};
 export default {
   signup,
   signin,

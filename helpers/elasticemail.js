@@ -2,7 +2,7 @@ import ElasticEmail from '@elasticemail/elasticemail-client';
 import 'dotenv/config';
 
 const { ELASTICEMAIL_KEY, ELASTICEMAIL_FROM } = process.env;
-const elasticemail = () => {
+const elasticemail = ({ to, sendBody }) => {
   const defaultClient = ElasticEmail.ApiClient.instance;
 
   const { apikey } = defaultClient.authentications;
@@ -11,12 +11,12 @@ const elasticemail = () => {
   const api = new ElasticEmail.EmailsApi();
 
   const email = ElasticEmail.EmailMessageData.constructFromObject({
-    Recipients: [new ElasticEmail.EmailRecipient('kakisik176@wanbeiz.com ')],
+    Recipients: [new ElasticEmail.EmailRecipient(to)],
     Content: {
       Body: [
         ElasticEmail.BodyPart.constructFromObject({
           ContentType: 'HTML',
-          Content: '<p>Hello, this verification</p>',
+          Content: sendBody,
         }),
       ],
       Subject: 'TEST',
