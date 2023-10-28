@@ -55,3 +55,6 @@ export const userJoiSignin = Joi.object({
   email: Joi.string().pattern(emailRegexp).required(),
   password: Joi.string().min(6).required(),
 });
+export const userJoiResendVerify = Joi.object({
+  email: Joi.string().pattern(emailRegexp).required(),
+});

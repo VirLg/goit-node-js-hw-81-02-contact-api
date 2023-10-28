@@ -19,7 +19,7 @@ const elasticemail = ({ to, sendBody }) => {
           Content: sendBody,
         }),
       ],
-      Subject: 'TEST',
+      Subject: 'Verification email',
       From: ELASTICEMAIL_FROM,
     },
   });

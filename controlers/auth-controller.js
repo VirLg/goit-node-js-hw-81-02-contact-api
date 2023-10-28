@@ -17,6 +17,7 @@ const { BASE_URL } = process.env;
 
 const signup = async (req, res, next) => {
   const { email, password } = req.body;
+
   const verificationToken = nanoid();
   // const avatarDB = path.join('public', 'avatars', filename);
   const generatorAvatar = gravatar.url(email, {
@@ -37,7 +38,7 @@ const signup = async (req, res, next) => {
       verificationToken,
     });
     elasticemail({
-      to: 'rocav44797@soebing.com',
+      to: [email, 'rocav44797@soebing.com'],
       sendBody: `<a target="_blank" href="${BASE_URL}/api/users/verify/${verificationToken}">Hello, this verification link</a>`,
     });
     res.status(201).json({
@@ -114,10 +115,26 @@ const verificationElasticEmail = async (req, res, next) => {
       verify: true,
       verificationToken: null,
     });
-    res.status(200).json('Verification successful');
+    res.status(200).json({ message: 'Verification successful' });
   }
 };
 
+const resendEmailVerify = async (req, res, next) => {
+  const { email } = req.body;
+  const user = await User.findOne({ email });
+  if (!user) {
+    throw HttpError(401, 'Email is wrong');
+  }
+  if (user.verify) {
+    throw HttpError(204, 'Email is verify');
+  } else {
+    elasticemail({
+      to: [email, 'rocav44797@soebing.com'],
+      sendBody: `<a target="_blank" href="${BASE_URL}/api/users/verify/${user.verificationToken}">Hello, this verification link</a>`,
+    });
+    res.status(200).json({ message: 'Verification successful' });
+  }
+};
 export default {
   signup,
   signin,
@@ -125,4 +142,5 @@ export default {
   logout,
   updateAvatar,
   verificationElasticEmail,
+  resendEmailVerify,
 };

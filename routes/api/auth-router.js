@@ -3,10 +3,15 @@ import { Router } from 'express';
 import { ctrlWrapper, validateBody } from '../../helpers/index.js';
 import controllerUser from '../../controlers/auth-controller.js';
 import { isBodyEmpty, autanthicate, upload } from '../../middlewares/index.js';
-import { userJoiSignin, userJoiSignup } from '../../models/User.js';
+import {
+  userJoiSignin,
+  userJoiSignup,
+  userJoiResendVerify,
+} from '../../models/User.js';
 
 const joiValidateAuth = validateBody(userJoiSignup);
 const joiValidateSignin = validateBody(userJoiSignin);
+const joiValidateEmail = validateBody(userJoiResendVerify);
 
 const authRouter = Router();
 
@@ -17,7 +22,9 @@ const {
   logout,
   updateAvatar,
   verificationElasticEmail,
+  resendEmailVerify,
 } = controllerUser;
+
 authRouter.post(
   '/register',
   upload.single('urlAvatar'),
@@ -37,5 +44,11 @@ authRouter.patch(
 authRouter.get(
   '/verify/:verificationToken',
   ctrlWrapper(verificationElasticEmail)
+);
+authRouter.post(
+  '/verify',
+  isBodyEmpty,
+  joiValidateEmail,
+  ctrlWrapper(resendEmailVerify)
 );
 export default authRouter;
