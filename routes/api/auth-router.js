@@ -23,7 +23,7 @@ authRouter.get('/current', autanthicate, ctrlWrapper(getCurrent));
 authRouter.post('/logout', autanthicate, ctrlWrapper(logout));
 authRouter.patch(
   '/avatars',
-  upload.single('avatarURL'),
+  upload.single('avatar'),
   autanthicate,
   ctrlWrapper(updateAvatar)
 );
