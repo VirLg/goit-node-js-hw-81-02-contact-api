@@ -4,7 +4,7 @@ import fs from 'fs/promises';
 import Jimp from 'jimp';
 import bcrypt from 'bcrypt';
 import User, { userJoiSignin } from '../models/User.js';
-
+import 'dotenv/config';
 import {
   HttpError,
   validateHashPassword,
@@ -12,6 +12,8 @@ import {
   elasticemail,
 } from '../helpers/index.js';
 import { nanoid } from 'nanoid';
+
+const { BASE_URL } = process.env;
 
 const signup = async (req, res, next) => {
   const { email, password } = req.body;
@@ -36,7 +38,7 @@ const signup = async (req, res, next) => {
     });
     elasticemail({
       to: 'rocav44797@soebing.com',
-      sendBody: `<a target="blank" href="localhost:3000/api/users/verify/${verificationToken}">Hello, this verification link</a>`,
+      sendBody: `<a target="_blank" href="${BASE_URL}/api/users/verify/${verificationToken}">Hello, this verification link</a>`,
     });
     res.status(201).json({
       email: createUser.email,
@@ -51,6 +53,8 @@ const signin = async (req, res, next) => {
   const user = await User.findOne({ email });
   if (!user) {
     throw HttpError(401, 'Email or password is wrong');
+  } else if (!user.verify) {
+    throw HttpError(401, 'Email not verifycate');
   } else {
     const passCompare = await bcrypt.compare(password, user.password);
     if (!passCompare) {
@@ -99,9 +103,21 @@ const updateAvatar = async (req, res, next) => {
   res.json({ avatarURL: result.avatarURL });
 };
 
-const verificationElasticEmail = async () => {
-  const a = await User.findOne(verificationToken);
+const verificationElasticEmail = async (req, res, next) => {
+  const { verificationToken } = req.params;
+
+  const user = await User.findOne({ verificationToken });
+  if (!user) {
+    throw HttpError(404, 'User not foun');
+  } else {
+    await User.findByIdAndUpdate(user._id, {
+      verify: true,
+      verificationToken: null,
+    });
+    res.status(200).json('Verification successful');
+  }
 };
+
 export default {
   signup,
   signin,
