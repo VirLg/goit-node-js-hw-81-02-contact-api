@@ -1,6 +1,9 @@
 import Contact from '../models/Contact.js';
 import { HttpError } from '../helpers/index.js';
+import fs from 'fs/promises';
+import path from 'path';
 
+import Jimp from 'jimp';
 const getAll = async (req, res) => {
   const { _id: owner } = req.user;
   const result = await Contact.find({ owner });
@@ -35,9 +38,12 @@ export const deleteById = async (req, res, next) => {
 };
 
 export const add = async (req, res, next) => {
-  const { _id: owner } = req.user;
-  console.log('first', owner);
-  const createContact = await Contact.create({ ...req.body, owner });
+  const { _id: owner, email } = req.user;
+
+  const createContact = await Contact.create({
+    ...req.body,
+    owner,
+  });
   res.status(201).json(createContact);
 };
 

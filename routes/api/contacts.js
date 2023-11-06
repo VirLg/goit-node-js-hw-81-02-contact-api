@@ -7,6 +7,7 @@ import {
   isValidId,
   validateFavotite,
   autanthicate,
+  upload,
 } from '../../middlewares/index.js';
 const { add, getAll, getById, put, deleteById } = controllersContact;
 
@@ -22,4 +23,5 @@ router.delete('/:contactId', isValidId, ctrlWrapper(deleteById));
 router.post('/', isBodyEmpty, joiValidate, ctrlWrapper(add));
 router.put('/:contactId', joiValidate, isValidId, ctrlWrapper(put));
 router.patch('/:contactId/favorite', joiUpdate, isValidId, ctrlWrapper(put));
+
 export default router;

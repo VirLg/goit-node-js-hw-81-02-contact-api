@@ -1,5 +1,10 @@
-import User, { userJoiSignin } from '../models/User.js';
+import gravatar from 'gravatar';
+import path from 'path';
+import fs from 'fs/promises';
+import Jimp from 'jimp';
 import bcrypt from 'bcrypt';
+import User, { userJoiSignin } from '../models/User.js';
+
 import {
   HttpError,
   validateHashPassword,
@@ -8,6 +13,13 @@ import {
 
 const signup = async (req, res, next) => {
   const { email, password } = req.body;
+  // const avatarDB = path.join('public', 'avatars', filename);
+  const generatorAvatar = gravatar.url(email, {
+    s: '250',
+    r: 'pg',
+    d: 'retro',
+  });
+
   const user = await User.findOne({ email });
   if (user) {
     throw HttpError(409, `${email} in use `);
@@ -16,6 +28,7 @@ const signup = async (req, res, next) => {
     const createUser = await User.create({
       ...req.body,
       password: hashPassword,
+      avatarURL: generatorAvatar,
     });
     res.status(201).json({
       email: createUser.email,
@@ -51,8 +64,7 @@ const signin = async (req, res, next) => {
 
 const getCurrent = async (req, res, next) => {
   const { email } = req.body;
-  const user = await User.findOne({ email });
-
+  const resp = await User.findOne({ email: email });
   res.status(200).json({
     email: user.email,
     subscription: user.subscription,
@@ -63,4 +75,19 @@ const logout = async (req, res, next) => {
   await User.findByIdAndUpdate(req.user._id, { token: '' });
   res.status(204).json({});
 };
-export default { signup, signin, getCurrent, logout };
+
+const updateAvatar = async (req, res, next) => {
+  const { filename } = req.file;
+  const image = await Jimp.read(`temp/${filename}`);
+
+  await image.resize(250, 250);
+  const a = await image.writeAsync(`public/avatars/${filename}`);
+
+  const pathAvatar = path.join('public', 'avatars', filename);
+  const result = await User.findByIdAndUpdate(req.user._id, {
+    avatarURL: pathAvatar,
+  });
+
+  res.json({ avatarURL: result.avatarURL });
+};
+export default { signup, signin, getCurrent, logout, updateAvatar };
