@@ -19,7 +19,7 @@ const {
   signup,
   signin,
   getCurrent,
-  logout,
+
   updateAvatar,
   verificationElasticEmail,
   resendEmailVerify,
@@ -34,7 +34,7 @@ authRouter.post(
 );
 authRouter.post('/login', isBodyEmpty, joiValidateSignin, ctrlWrapper(signin));
 authRouter.get('/current', autanthicate, ctrlWrapper(getCurrent));
-authRouter.post('/logout', autanthicate, ctrlWrapper(logout));
+
 authRouter.patch(
   '/avatars',
   upload.single('avatar'),
